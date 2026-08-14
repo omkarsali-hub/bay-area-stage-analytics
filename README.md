@@ -31,9 +31,10 @@ websites and ticketing pages, then built a Streamlit app to analyze it.
 
 ## Dataset
 
-`data/shows.csv` — hand-collected listings for Bay Area community theater,
-cultural programs and desi standup. See `data/COLLECTION_GUIDE.md` for the schema,
-sources and collection rules.
+`data/shows.csv` — 39 collected listings for Bay Area community theater,
+cultural programs and desi standup, plus an English-language comparison set.
+See `data/COLLECTION_GUIDE.md` for the schema, sources and collection rules,
+and `PROMPTS.md` for how the dataset was built out.
 
 Every row carries a `source_url` so any figure in the app can be traced back to
 where it came from.

@@ -252,8 +252,26 @@ unguarded in a production tool.
   `.claude/launch.json` for the dev-server preview) — none of that is
   "coding," but all of it gated whether any of the above could be verified
   rather than just trusted.
-- **Known gap going into submission:** `data/shows.csv` has 5 rows against the
-  60-100 row target in `COLLECTION_GUIDE.md`. Every chart above is verified
-  *working*, but several (saturation collisions, seasonality clustering,
-  price-by-language spread) won't say anything *interesting* until the dataset
-  is actually collected per the guide's two-hour, source-by-source plan.
+- **Dataset expansion (post-initial-build):** Went from 5 to 39 rows by
+  working the guide's own source list — Sulekha (Marathi/Hindi/Gujarati/
+  Tamil/Telugu/Bengali/Punjabi pages plus the general Bay Area listing),
+  Naatak's full Season 31, Eventbrite, India Currents, and 13 English-language
+  comparison shows across 9 mainstream Bay Area theater companies. Used
+  parallel research agents to cover the sources faster, but did the filtering
+  and merge myself — several titles that looked like theater on first pass
+  turned out not to be ("YAHOO! A Shankar Jaikishan Musical" is a tribute
+  concert despite "Musical" in the name; "Thank You 5 (Uff Yeh Gehraiyaan)"
+  is a yacht party; "Rajkumari" is poetry/storytelling, not a scripted play)
+  and were excluded rather than counted toward the row total. Every row has a
+  real source URL; every unconfirmed or multi-date-range show is flagged
+  `PLACEHOLDER` in notes per the guide's own convention. Still short of the
+  60-100 target — 39 is a defensible middle ground given the deadline, and
+  the app now surfaces a genuine same-day collision (2026-06-05) that
+  wasn't visible in the original 5-row sample.
+- **A second real bug this surfaced:** hand-editing one CSV row directly
+  (updating the old Naatak placeholder to a confirmed show) broke `pd.read_csv`
+  with "Expected 15 fields, saw 16" — an unquoted comma in a notes field I
+  typed by hand, invisible until parsed. Every other new row went through
+  `csv.DictWriter`, which quotes automatically; this one didn't because I
+  edited it directly. Fixed by replacing the comma with a semicolon. Lesson:
+  script-generate CSV rows even for "just one row," not just bulk edits.
