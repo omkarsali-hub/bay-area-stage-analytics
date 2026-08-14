@@ -3,13 +3,89 @@ import os
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
 load_dotenv()
 
-st.set_page_config(page_title="Bay Area Stage Analytics", layout="wide")
+st.set_page_config(page_title="Bay Area Stage Analytics", page_icon="🎭", layout="wide")
+
+# ---------------------------------------------------------------------------
+# Design tokens (dark mode) - see dataviz skill reference palette
+# ---------------------------------------------------------------------------
+SURFACE = "#1a1a19"
+PAGE_PLANE = "#0d0d0d"
+INK_PRIMARY = "#ffffff"
+INK_SECONDARY = "#c3c2b7"
+INK_MUTED = "#898781"
+GRIDLINE = "#2c2c2a"
+BASELINE = "#383835"
+STATUS_CRITICAL = "#d03b3b"
+
+# Fixed categorical order (never cycled) - first five slots of the validated
+# 8-hue dark palette: blue, orange, aqua, yellow, magenta.
+GENRE_COLORS = {
+    "Play": "#3987e5",
+    "Musical": "#d95926",
+    "Standup": "#199e70",
+    "Dance": "#c98500",
+    "Other": "#d55181",
+}
+COLLISION_COLORS = {True: STATUS_CRITICAL, False: INK_MUTED}
+
+CUSTOM_CSS = f"""
+<style>
+    .block-container {{
+        padding-top: 2rem;
+        max-width: 1200px;
+    }}
+    h1 {{
+        font-size: 2.1rem !important;
+    }}
+    .app-subtitle {{
+        color: {INK_SECONDARY};
+        margin-top: -0.6rem;
+        margin-bottom: 1.2rem;
+        font-size: 0.95rem;
+    }}
+    [data-testid="stMetric"] {{
+        background: {SURFACE};
+        border: 1px solid {BASELINE};
+        border-radius: 10px;
+        padding: 0.9rem 1rem 0.7rem 1rem;
+    }}
+    [data-testid="stMetricLabel"] {{
+        color: {INK_MUTED};
+    }}
+    .stTabs [data-baseweb="tab-list"] {{
+        gap: 4px;
+    }}
+    .stTabs [data-baseweb="tab"] {{
+        padding: 0.5rem 1rem;
+    }}
+    [data-testid="stSidebar"] {{
+        border-right: 1px solid {BASELINE};
+    }}
+</style>
+"""
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+
+def themed(fig: go.Figure) -> go.Figure:
+    """Apply the shared dark chart theme (surfaces, ink, gridlines) to a figure."""
+    fig.update_layout(
+        paper_bgcolor=SURFACE,
+        plot_bgcolor=SURFACE,
+        font=dict(color=INK_SECONDARY, family="system-ui, -apple-system, 'Segoe UI', sans-serif"),
+        legend=dict(bgcolor="rgba(0,0,0,0)"),
+        margin=dict(t=40, l=10, r=10, b=10),
+    )
+    fig.update_xaxes(gridcolor=GRIDLINE, linecolor=BASELINE, zerolinecolor=BASELINE, color=INK_MUTED)
+    fig.update_yaxes(gridcolor=GRIDLINE, linecolor=BASELINE, zerolinecolor=BASELINE, color=INK_MUTED)
+    return fig
+
 
 SCHEMA_COLUMNS = [
     "show_title", "company", "language", "genre", "venue", "city", "region",
@@ -48,7 +124,13 @@ Text:
             text = text[4:]
     return json.loads(text)
 
-st.title("Bay Area Stage Analytics")
+
+st.title("🎭 Bay Area Stage Analytics")
+st.markdown(
+    '<div class="app-subtitle">Where Bay Area desi theater and standup collide — '
+    "pricing, venues, dates, and companies, in one place.</div>",
+    unsafe_allow_html=True,
+)
 
 
 @st.cache_data
@@ -68,7 +150,7 @@ FILTER_COLUMNS = ["language", "genre", "region", "company"]
 for col in FILTER_COLUMNS:
     df[col] = df[col].fillna("Unknown")
 
-st.sidebar.header("Filters")
+st.sidebar.header("🔎 Filters")
 
 
 def multiselect_filter(label: str, column: str) -> list[str]:
@@ -107,6 +189,8 @@ col2.metric("Companies", filtered["company"].nunique())
 col3.metric("Venues", filtered["venue"].nunique())
 col4.metric("Languages", filtered["language"].nunique())
 
+st.write("")
+
 MONTH_ORDER = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
@@ -114,12 +198,12 @@ MONTH_ORDER = [
 
 tab_price, tab_venue, tab_saturation, tab_season, tab_company, tab_ai = st.tabs(
     [
-        "Price distribution",
-        "Venue concentration",
-        "Weekend saturation",
-        "Seasonality",
-        "Company activity",
-        "AI extract",
+        "💰 Price distribution",
+        "📍 Venue concentration",
+        "📅 Weekend saturation",
+        "🍂 Seasonality",
+        "🏢 Company activity",
+        "🤖 AI extract",
     ]
 )
 
@@ -140,8 +224,10 @@ with tab_price:
             points="all",
             hover_data=["show_title", "company", "price_min", "price_max"],
             labels={"price_mid": "Ticket price ($)", "language": "Language"},
+            color_discrete_map=GENRE_COLORS,
+            category_orders={"genre": list(GENRE_COLORS)},
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(themed(fig), width="stretch")
 
 with tab_venue:
     if filtered.empty:
@@ -157,8 +243,9 @@ with tab_venue:
             y="venue",
             orientation="h",
             labels={"shows": "Number of shows", "venue": "Venue"},
+            color_discrete_sequence=[GENRE_COLORS["Play"]],
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(themed(fig), width="stretch")
 
 with tab_saturation:
     if filtered.empty:
@@ -172,10 +259,10 @@ with tab_saturation:
             x="date",
             y="shows",
             color="is_collision",
-            color_discrete_map={True: "#e05252", False: "#7fa7d6"},
+            color_discrete_map=COLLISION_COLORS,
             labels={"shows": "Shows that day", "date": "Date", "is_collision": "2+ shows same day"},
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(themed(fig), width="stretch")
 
         collisions = by_date[by_date["is_collision"]].sort_values("date")
         if collisions.empty:
@@ -195,8 +282,12 @@ with tab_season:
     else:
         by_month = filtered["month"].value_counts().reindex(MONTH_ORDER, fill_value=0).reset_index()
         by_month.columns = ["month", "shows"]
-        fig = px.bar(by_month, x="month", y="shows", labels={"shows": "Number of shows", "month": "Month"})
-        st.plotly_chart(fig, width="stretch")
+        fig = px.bar(
+            by_month, x="month", y="shows",
+            labels={"shows": "Number of shows", "month": "Month"},
+            color_discrete_sequence=[GENRE_COLORS["Musical"]],
+        )
+        st.plotly_chart(themed(fig), width="stretch")
         st.caption(
             "Bay Area desi festival season (Ganesh Chaturthi, Navratri, Diwali) typically "
             "falls Aug–Nov; watch this chart for that cluster as the dataset grows."
@@ -218,8 +309,9 @@ with tab_company:
             y="company",
             orientation="h",
             labels={"shows": "Number of shows", "company": "Company"},
+            color_discrete_sequence=[GENRE_COLORS["Standup"]],
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(themed(fig), width="stretch")
         st.write("**Most recent show per company** (a company far from today's date has gone quiet):")
         st.dataframe(
             activity[["company", "shows", "first_show", "last_show"]].sort_values("last_show"),

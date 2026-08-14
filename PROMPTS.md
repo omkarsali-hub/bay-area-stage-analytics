@@ -6,7 +6,8 @@ graded on.
 
 **Assistant used:** Claude Code (CLI)
 **Model:** claude-sonnet-5
-**Total session time:** ~45 min for app.py (single continuous session, Aug 14 2026)
+**Total session time:** ~45 min for app.py build, plus a later session for
+dataset expansion (5→39 rows) and a visual redesign pass (Aug 14 2026)
 
 ---
 
@@ -224,6 +225,54 @@ generic `except Exception` — acceptable for a v1, not something I'd leave
 unguarded in a production tool.
 
 **Screenshot:** `screenshots/prompt-5-ai-extract.png`
+
+---
+
+## Prompt 6 — Visual redesign
+
+**Prompt sent**
+
+```
+The UI looks like stock Streamlit — flat black background, no visual
+hierarchy, default plotly colors. Redesign it: dark theme via
+.streamlit/config.toml, card-styled KPI metrics, a fixed categorical color
+palette applied consistently across every chart (not plotly's default
+per-chart auto-assignment), tab icons, and a themed plotly template (shared
+surface/gridline/ink colors) applied to every figure.
+```
+
+**What came back**
+
+A `.streamlit/config.toml` dark theme, a `CUSTOM_CSS` block styling
+`stMetric` into bordered cards, a `themed()` helper applying shared
+surface/gridline/ink colors to every plotly figure, a fixed `GENRE_COLORS`
+dict (five colors from a pre-validated colorblind-safe categorical order,
+not plotly's auto-cycling), and emoji icons on each tab label.
+
+**Did it work?**
+
+Partially. The theme and cards worked first pass. But the first version of
+`themed()` set `title_font` on every figure even though no chart sets an
+actual title — Plotly rendered the literal string "undefined" as a chart
+title on every single tab. Not visible without actually loading the app;
+would have shipped in the demo video if I'd only read the diff.
+
+**What I had to fix**
+
+Dropped the unused `title_font` line from `themed()`. Separately — while
+eyeballing the venue chart with the new styling — noticed "Cubberley
+Theater" vs "Cubberley Theatre" and "Douglas Morrisson Theatre" vs "The
+Douglas Morrisson Theatre" were rendering as separate bars for the same
+real venue (venues went from 29 "unique" down to 24 once standardized).
+This was a spelling-consistency bug in my own data-collection pass from
+earlier, exactly the failure mode `COLLECTION_GUIDE.md` warns about for
+company names — the redesign is what made it visible, since a cleaner
+chart made the duplicate bars obvious instead of blending into visual
+noise. Also hit a stale-cache issue: `st.cache_data` doesn't know the CSV
+changed on disk, so the venue count didn't update until I restarted the
+server, not just reran the script.
+
+**Screenshot:** `screenshots/prompt-6-redesign.png`
 
 ---
 
