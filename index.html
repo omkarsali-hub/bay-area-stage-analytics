@@ -43,33 +43,6 @@ a{color:inherit}
 
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 
-/* ---------- two-column layout ---------- */
-.layout{display:flex;align-items:stretch;min-height:100vh}
-.main-col{flex:1;min-width:0}
-.analytics-col{
-  width:460px;flex-shrink:0;
-  border-left:1px solid var(--edge);
-  background:var(--velvet);
-  position:sticky;top:0;height:100vh;
-  display:flex;flex-direction:column;
-}
-.analytics-head{padding:16px 18px 12px;border-bottom:1px solid var(--edge)}
-.analytics-eyebrow{
-  font-family:var(--data);font-size:11px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--marigold);
-}
-.analytics-head h3{
-  font-family:var(--display);text-transform:uppercase;
-  font-size:19px;margin:6px 0 6px;letter-spacing:.01em;
-}
-.analytics-head p{margin:0;font-size:12.5px;color:var(--muted)}
-.analytics-col iframe{flex:1;border:none;width:100%;background:var(--house)}
-
-@media (max-width:1100px){
-  .layout{flex-direction:column}
-  .analytics-col{width:100%;height:640px;position:static;border-left:none;border-top:1px solid var(--edge)}
-}
-
 /* ---------- marquee header ---------- */
 .marquee{
   border-bottom:1px solid var(--edge);
@@ -293,9 +266,6 @@ footer b{color:var(--paper)}
 </head>
 <body>
 
-<div class="layout">
-<div class="main-col">
-
 <header class="marquee">
   <div class="wrap">
     <div class="bulbs" id="bulbs" aria-hidden="true"></div>
@@ -367,21 +337,8 @@ footer b{color:var(--paper)}
     <code>data/shows.csv</code> — a hand-collected dataset with a source URL on
     every row (Sulekha, Naatak, Eventbrite, India Currents and company sites).
     Only shows on or after today are listed. Tickets always click out to the
-    company's own seller — we never hold the money. See the analytics panel
-    for the full dataset, including past shows and collection methodology.
+    company's own seller — we never hold the money.
   </footer>
-</div>
-</div>
-
-<aside class="analytics-col">
-  <div class="analytics-head">
-    <div class="analytics-eyebrow">Live analytics</div>
-    <h3>📊 The data behind it</h3>
-    <p>Same dataset the calendar reads from — filter by language, genre, region and date to see pricing, venue concentration, weekend collisions and company activity.</p>
-  </div>
-  <iframe src="http://localhost:8501/?embed=true" title="Bay Area Stage Analytics" loading="lazy"></iframe>
-</aside>
-
 </div>
 
 <script>
@@ -401,7 +358,7 @@ const SHOWS = [
     "lang": "English", "venue": "Hillbarn Theatre", "city": "Foster City", "region": "Peninsula",
     "time": null, "lo": 44, "hi": 65, "seller": "Own site",
     "url": "https://www.hillbarntheatre.org/shows-tickets/",
-    "hue": "#FFC145", "dates": ["2026-08-20"]
+    "hue": "#FFC145", "dates": ["2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-27","2026-08-28","2026-08-29","2026-08-30","2026-09-03","2026-09-04","2026-09-05","2026-09-06","2026-09-10","2026-09-11","2026-09-12","2026-09-13"]
   },
   {
     "t": "12th Annual Desi Comedy Fest - Hayward", "co": "Desi Comedy Fest", "type": "Standup",
@@ -443,7 +400,7 @@ const SHOWS = [
     "lang": "Hindi", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
     "time": null, "lo": null, "hi": null, "seller": "Own site",
     "url": "https://www.naatak.org/portfolio/bombay-talkies-2/",
-    "hue": "#FF8A3D", "dates": ["2026-09-12"]
+    "hue": "#FF8A3D", "dates": ["2026-09-12","2026-09-13","2026-09-18","2026-09-19","2026-09-20","2026-09-25","2026-09-26","2026-09-27","2026-10-02","2026-10-03","2026-10-04"]
   },
   {
     "t": "Jaane Pehchaane Anjane - A Musical Play by Anupam Kher & Swaroop Sampat", "co": "Instant Karma", "type": "Musical",

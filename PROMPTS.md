@@ -350,6 +350,64 @@ that makes this "one page," not two.
 
 ---
 
+## Prompt 8 — Remove the analytics panel; fix missing multi-date shows
+
+**Feedback received**
+
+```
+I think we should remove the data analytics part. it looks ugly and doesn't
+look nice. also I think some of the data is missing. there are shows
+available on the websites but I can't see them on our calendar.
+```
+
+**What I did**
+
+Two independent issues, handled separately:
+
+1. **Removed the embedded analytics iframe panel** from `index.html` — deleted
+   the two-column layout CSS, the `<aside>` panel, and reverted to a clean
+   single-column calendar. `app.py` still exists and still works, just no
+   longer embedded; README updated to describe it as a separate tool again.
+
+2. **Investigated the missing-shows report before touching anything.** Traced
+   the pipeline end to end: every one of the 21 upcoming rows in
+   `data/shows.csv` correctly appeared in `index.html`'s data — no bug. The
+   real cause was the known `PLACEHOLDER`-opening-date-only limitation
+   (documented back in Prompt 7's dataset section): multi-weekend runs were
+   stored as a single row for the first date, so a run playing six weekends
+   only ever lit up one square on the calendar.
+
+**What the user reported specifically**
+
+```
+Hillbarn theater pickleball shows are running from Aug 20th to Sept 13,
+thursday friday saturday sunday. Bombay Talkie 2 turning from Saturday
+Sept 12 to Oct 10th friday saturday sunday.. multiple shows on weekends.
+```
+
+**What I had to fix**
+
+Re-fetched both source pages before itemizing anything — the day-of-week
+pattern the user reported isn't published on either page (they only state a
+date range), so I couldn't independently confirm it, but the *end date* is
+independently checkable and I caught a real discrepancy: two separate fetches
+of naatak.org both say Bombay Talkies 2 ends **October 4**, not October 10.
+Used the verified end date, kept the user-reported day-of-week pattern (noted
+in the CSV as user-reported, not independently confirmed, since neither
+official page itemizes individual dates), and generated the actual performance
+dates programmatically rather than by hand: 16 rows for Pickleball (Thu-Sun,
+Aug 20-Sep 13) and 11 for Bombay Talkies 2 (Sat-Sun opening weekend, then
+Fri-Sun, Sep 12-Oct 4). Replaced the two old single-date `PLACEHOLDER` rows
+with these. Dataset grew from 39 to 64 rows in the process.
+
+Flagged the date discrepancy back to the user rather than silently picking
+one version — a case where trusting a verified independent source over a
+secondhand recollection was the right call, but transparently, not silently.
+
+**Screenshot:** `screenshots/prompt-8-fixed-calendar.png`
+
+---
+
 ## Learnings
 
 - **Where the assistant was strongest:** Generating correct, idiomatic
