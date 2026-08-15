@@ -10,6 +10,12 @@ graded on.
 dataset expansion (5→39 rows), a visual redesign pass, and the Rangmanch
 integration that became the primary deliverable (all Aug 14 2026)
 
+**Note on screenshots:** taken in one batch at the end of the build (Playwright,
+against the running app), not live at each historical step — several early
+UI states (e.g. Prompt 1's bare raw table, pre-redesign) no longer exist to
+screenshot. Filenames below point to the real feature each prompt introduced,
+as it looks in the final app.
+
 ---
 
 ## Template — copy this block for each prompt
@@ -76,7 +82,8 @@ Nothing at this stage. The dependencies (`streamlit`, `pandas`, `plotly`,
 `anthropic`, `python-dotenv`) weren't installed yet, so I created a `.venv` and
 installed `requirements.txt` before this would even run.
 
-**Screenshot:** `screenshots/prompt-1-raw-table.png`
+**Screenshot:** none preserved — the bare raw-table view was fully replaced by
+the tabbed layout in Prompt 3 and the redesign in Prompt 6; see those instead.
 
 ---
 
@@ -113,7 +120,7 @@ building the filter options, so blank values become an explicit, selectable
 line went from "5 of 5... but only showing 4 rows worth of variety" to
 correctly reflecting all 5 rows with "Unknown" appearing as a language option.
 
-**Screenshot:** `screenshots/prompt-2-filters.png`
+**Screenshot:** `screenshots/analytics-weekend-saturation.png` (sidebar filters visible, expanded)
 
 ---
 
@@ -147,7 +154,7 @@ logged a Streamlit deprecation warning in the server log (removed after
 2025-12-31, replaced by `width="stretch"`). Fixed across all five chart calls
 in the file with a single `sed` pass rather than waiting for it to break.
 
-**Screenshot:** `screenshots/prompt-3-charts.png`
+**Screenshot:** `screenshots/analytics-price-distribution.png`, `screenshots/analytics-venue-concentration.png`
 
 ---
 
@@ -184,7 +191,7 @@ Nothing broke, but I intentionally kept the month order pinned to the calendar
 otherwise a sparse dataset would produce a seasonality chart with months in a
 meaningless order.
 
-**Screenshot:** `screenshots/prompt-4-saturation.png`
+**Screenshot:** `screenshots/analytics-weekend-saturation.png`, `screenshots/analytics-seasonality.png`, `screenshots/analytics-company-activity.png`
 
 ---
 
@@ -225,7 +232,7 @@ than a fence or a `{` would break `json.loads` and only be caught by the
 generic `except Exception` — acceptable for a v1, not something I'd leave
 unguarded in a production tool.
 
-**Screenshot:** `screenshots/prompt-5-ai-extract.png`
+**Screenshot:** `screenshots/analytics-ai-extract.png`
 
 ---
 
@@ -273,7 +280,7 @@ noise. Also hit a stale-cache issue: `st.cache_data` doesn't know the CSV
 changed on disk, so the venue count didn't update until I restarted the
 server, not just reran the script.
 
-**Screenshot:** `screenshots/prompt-6-redesign.png`
+**Screenshot:** `screenshots/analytics-price-distribution.png` (card-styled metrics, themed chart, tab icons)
 
 ---
 
@@ -339,7 +346,7 @@ test workaround. Documented as a required two-terminal step in the README's
 "Run locally" section, since forgetting it silently breaks the one thing
 that makes this "one page," not two.
 
-**Screenshot:** `screenshots/prompt-7-rangmanch.png`
+**Screenshot:** `screenshots/rangmanch-hero.png`, `screenshots/rangmanch-calendar-and-analytics.png`, `screenshots/rangmanch-cards.png`, `screenshots/rangmanch-mobile.png`
 
 ---
 
