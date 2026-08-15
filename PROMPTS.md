@@ -7,7 +7,8 @@ graded on.
 **Assistant used:** Claude Code (CLI)
 **Model:** claude-sonnet-5
 **Total session time:** ~45 min for app.py build, plus a later session for
-dataset expansion (5→39 rows) and a visual redesign pass (Aug 14 2026)
+dataset expansion (5→39 rows), a visual redesign pass, and the Rangmanch
+integration that became the primary deliverable (all Aug 14 2026)
 
 ---
 
@@ -273,6 +274,72 @@ changed on disk, so the venue count didn't update until I restarted the
 server, not just reran the script.
 
 **Screenshot:** `screenshots/prompt-6-redesign.png`
+
+---
+
+## Prompt 7 — Rangmanch integration (primary deliverable pivot)
+
+**Context**
+
+I had a separate hand-designed HTML/CSS/JS prototype (`rangmanch-prototype.html`)
+— a consumer-facing show calendar with its own carnival/marquee visual identity
+and fictional seed data, built independently of this project. I asked to combine
+it with the analytics app: Rangmanch as the primary page, the Streamlit analytics
+embedded in a persistent side panel, and decided on the specifics (iframe vs.
+native rebuild, real data vs. mock, panel layout) through a short back-and-forth
+before any code was written.
+
+**Prompt sent**
+
+```
+[Attached rangmanch-prototype.html] Can we have one page where we can display
+this prototype and have an analytics page somewhere on the side which will
+show the analytics? Ask questions, let me make a decision and then execute.
+```
+
+Follow-up, after the assistant asked 4 clarifying questions (iframe vs. native
+rebuild; real vs. mock data; primary-vs-bonus deliverable; panel behavior):
+
+```
+Iframe the Streamlit app. Real data only — no fictional seed shows, upcoming
+shows only, relative to Aug 14 2026. This becomes the main submission.
+Persistent side column.
+```
+
+**What came back**
+
+A Python transform script converting `data/shows.csv` into the prototype's
+JS show format, filtered to `date >= 2026-08-14` (21 of 39 rows qualified),
+grouped by title+company. A new `index.html` combining the original
+Rangmanch design with a two-column sticky layout, the real data wired in,
+and a `.streamlit/config.toml` `toolbarMode = "minimal"` tweak plus
+`?embed=true` on the iframe URL to hide Streamlit's own chrome.
+
+**Did it work?**
+
+Partially, and in an instructive way. The data transform and calendar/card
+logic worked correctly on the first real test — including edge cases I'd
+built explicit handling for (null price → "Price TBA" instead of crashing
+the tier/sort logic, `$25` instead of `$25–25` when `price_min == price_max`,
+a blank `company` falling back to "Producer not listed" rather than showing
+`null`). But the analytics iframe itself was blank on the first load.
+
+**What I had to fix**
+
+The browser tool's preview pane loads local `file://` paths outside its
+recognized project root as an opaque `data:`-URL snapshot rather than a real
+navigation — which silently blocks an iframe to `localhost:8501`
+(`net::ERR_BLOCKED_BY_CLIENT`) because a `data:` page has no origin to grant
+cross-origin iframe permissions from. Not something visible from reading the
+code; only showed up by actually loading the page and checking the network
+tab. Fixed by serving `index.html` over a plain local HTTP server
+(`python3 -m http.server`) instead of opening it directly — which also
+matches how a real user would eventually deploy this, so it's not just a
+test workaround. Documented as a required two-terminal step in the README's
+"Run locally" section, since forgetting it silently breaks the one thing
+that makes this "one page," not two.
+
+**Screenshot:** `screenshots/prompt-7-rangmanch.png`
 
 ---
 

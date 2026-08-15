@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rangmanch — Bay Area stage &amp; standup</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap');
+
+:root{
+  --house:#150C21;
+  --velvet:#241236;
+  --velvet-lift:#32194A;
+  --edge:#3E2356;
+  --marigold:#FFC145;
+  --rani:#FF4D8D;
+  --paper:#F5EDE2;
+  --muted:#A392B8;
+
+  --bulb-1:#FFD37A;
+  --bulb-2:#FFB01F;
+  --bulb-3:#C2761A;
+  --bulb-4:#6E4A2E;
+
+  --display:'Anton', Impact, sans-serif;
+  --body:'DM Sans', system-ui, sans-serif;
+  --data:'DM Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--house);
+  color:var(--paper);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--marigold);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---------- two-column layout ---------- */
+.layout{display:flex;align-items:stretch;min-height:100vh}
+.main-col{flex:1;min-width:0}
+.analytics-col{
+  width:460px;flex-shrink:0;
+  border-left:1px solid var(--edge);
+  background:var(--velvet);
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;
+}
+.analytics-head{padding:16px 18px 12px;border-bottom:1px solid var(--edge)}
+.analytics-eyebrow{
+  font-family:var(--data);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--marigold);
+}
+.analytics-head h3{
+  font-family:var(--display);text-transform:uppercase;
+  font-size:19px;margin:6px 0 6px;letter-spacing:.01em;
+}
+.analytics-head p{margin:0;font-size:12.5px;color:var(--muted)}
+.analytics-col iframe{flex:1;border:none;width:100%;background:var(--house)}
+
+@media (max-width:1100px){
+  .layout{flex-direction:column}
+  .analytics-col{width:100%;height:640px;position:static;border-left:none;border-top:1px solid var(--edge)}
+}
+
+/* ---------- marquee header ---------- */
+.marquee{
+  border-bottom:1px solid var(--edge);
+  background:
+    radial-gradient(120% 90% at 50% -20%, rgba(255,193,69,.16), transparent 60%),
+    var(--house);
+  position:relative;
+}
+.bulbs{display:flex;gap:10px;justify-content:center;padding:14px 0 0;flex-wrap:wrap}
+.bulb{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--bulb-2);
+  box-shadow:0 0 8px var(--bulb-2);
+  animation:flicker 2.4s infinite ease-in-out;
+}
+@keyframes flicker{0%,100%{opacity:.25}50%{opacity:1}}
+
+.brandrow{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;padding:22px 0 26px;
+}
+.brand h1{
+  font-family:var(--display);
+  font-size:clamp(44px,8vw,84px);
+  line-height:.86;
+  letter-spacing:.01em;
+  margin:0;
+  text-transform:uppercase;
+}
+.brand h1 span{color:var(--marigold)}
+.brand p{
+  margin:10px 0 0;
+  max-width:34ch;
+  color:var(--muted);
+  font-size:15px;
+}
+.supply{
+  border:1px solid var(--edge);
+  background:var(--velvet);
+  border-radius:12px;
+  padding:14px 16px;
+  max-width:280px;
+}
+.supply strong{display:block;font-size:14px;margin-bottom:4px}
+.supply p{margin:0 0 10px;font-size:13px;color:var(--muted)}
+.supply button{
+  font-size:13px;font-weight:700;color:var(--house);
+  background:var(--marigold);border-radius:8px;padding:7px 12px;
+}
+
+/* ---------- filters ---------- */
+.filters{padding:18px 0 22px;border-bottom:1px solid var(--edge)}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.search{
+  flex:1 1 260px;display:flex;align-items:center;gap:10px;
+  background:var(--velvet);border:1px solid var(--edge);
+  border-radius:10px;padding:0 14px;
+}
+.search input{
+  flex:1;background:none;border:none;color:var(--paper);
+  font-family:var(--body);font-size:15px;padding:12px 0;
+}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none}
+
+.chipgroup{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
+.chiplabel{
+  font-family:var(--data);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);width:74px;flex:none;
+}
+.chip{
+  border:1px solid var(--edge);border-radius:999px;
+  padding:6px 13px;font-size:13.5px;color:var(--muted);
+  background:transparent;transition:all .15s;
+}
+.chip:hover{border-color:var(--marigold);color:var(--paper)}
+.chip[aria-pressed="true"]{
+  background:var(--marigold);border-color:var(--marigold);
+  color:var(--house);font-weight:700;
+}
+
+/* ---------- calendar ---------- */
+.section-eyebrow{
+  font-family:var(--data);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--marigold);margin:34px 0 6px;
+}
+.section-title{
+  font-family:var(--display);text-transform:uppercase;
+  font-size:clamp(24px,4vw,34px);margin:0 0 4px;letter-spacing:.01em;
+}
+.section-sub{margin:0 0 18px;color:var(--muted);font-size:14.5px}
+
+.calshell{
+  border:1px solid var(--edge);border-radius:16px;
+  background:linear-gradient(180deg,var(--velvet),#1D0F2C);
+  padding:18px 16px 16px;
+}
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.calmonth{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.04em}
+.navbtn{
+  border:1px solid var(--edge);border-radius:8px;width:34px;height:34px;
+  font-size:16px;color:var(--muted);line-height:1;
+}
+.navbtn:hover:not(:disabled){color:var(--marigold);border-color:var(--marigold)}
+.navbtn:disabled{opacity:.3;cursor:not-allowed}
+
+.dow{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;
+}
+.dow span{
+  text-align:center;font-family:var(--data);font-size:10.5px;
+  letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
+}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cell{
+  aspect-ratio:1/.92;min-height:54px;border-radius:10px;
+  border:1px solid transparent;background:rgba(255,255,255,.03);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:4px;transition:transform .12s, box-shadow .12s;
+}
+.cell.empty{background:none;pointer-events:none}
+.cell.past{opacity:.28;pointer-events:none}
+.cell .dnum{font-family:var(--data);font-size:12px;color:var(--muted)}
+.cell .price{font-family:var(--data);font-size:13px;font-weight:500}
+.cell .dot{width:5px;height:5px;border-radius:50%;background:var(--muted);opacity:.5}
+
+.cell.has:hover{transform:translateY(-2px)}
+.cell.t0{background:rgba(163,146,184,.12);border-color:rgba(163,146,184,.35)}
+.cell.t0 .price{color:var(--muted);font-size:10.5px}
+.cell.t1{background:rgba(255,211,122,.20);border-color:rgba(255,211,122,.55);box-shadow:0 0 18px rgba(255,193,69,.28) inset}
+.cell.t2{background:rgba(255,176,31,.13);border-color:rgba(255,176,31,.38)}
+.cell.t3{background:rgba(194,118,26,.11);border-color:rgba(194,118,26,.32)}
+.cell.t4{background:rgba(110,74,46,.13);border-color:rgba(110,74,46,.42)}
+.cell.t1 .price{color:var(--bulb-1)}
+.cell.t2 .price{color:var(--bulb-2)}
+.cell.t3 .price{color:#DE9A4A}
+.cell.t4 .price{color:#B08A6A}
+.cell.t0 .dnum,.cell.t1 .dnum,.cell.t2 .dnum,.cell.t3 .dnum,.cell.t4 .dnum{color:var(--paper);opacity:.75}
+.cell.sel{border-color:var(--rani);box-shadow:0 0 0 2px var(--rani)}
+
+.legend{
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  margin-top:14px;padding-top:13px;border-top:1px solid var(--edge);
+  font-size:12.5px;color:var(--muted);
+}
+.legend .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.cheapest{
+  margin-top:12px;font-size:13.5px;color:var(--paper);
+  background:rgba(255,77,141,.12);border:1px solid rgba(255,77,141,.4);
+  border-radius:10px;padding:9px 13px;
+}
+.cheapest b{color:var(--rani)}
+
+/* ---------- results ---------- */
+.resulthead{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;margin:36px 0 16px;
+}
+.resulthead h3{font-family:var(--display);text-transform:uppercase;font-size:22px;margin:0;letter-spacing:.02em}
+.clear{font-size:13px;color:var(--rani);text-decoration:underline;text-underline-offset:3px}
+
+.cards{display:grid;gap:14px}
+.card{
+  display:grid;grid-template-columns:104px 1fr auto;gap:16px;
+  border:1px solid var(--edge);border-radius:14px;background:var(--velvet);
+  padding:14px;align-items:center;transition:border-color .15s,background .15s;
+}
+.card:hover{border-color:var(--marigold);background:var(--velvet-lift)}
+.poster{
+  width:104px;height:104px;border-radius:10px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);font-size:40px;color:rgba(21,12,33,.82);
+  text-transform:uppercase;
+}
+.cbody h4{margin:0 0 5px;font-size:18px;font-weight:700;line-height:1.25}
+.cmeta{font-size:13.5px;color:var(--muted);margin:0 0 8px}
+.cmeta b{color:var(--paper);font-weight:500}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{
+  font-family:var(--data);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  border-radius:5px;padding:3px 7px;background:rgba(255,255,255,.07);color:var(--muted);
+}
+.tag.lang{background:rgba(255,193,69,.16);color:var(--marigold)}
+.tag.standup{background:rgba(255,77,141,.16);color:var(--rani)}
+.cbuy{text-align:right;min-width:150px}
+.price-lg{font-family:var(--data);font-size:19px;font-weight:500;color:var(--marigold);display:block}
+.price-note{font-size:11.5px;color:var(--muted);display:block;margin-bottom:9px}
+.buy{
+  display:inline-block;text-decoration:none;
+  background:var(--marigold);color:var(--house);font-weight:700;font-size:13.5px;
+  border-radius:9px;padding:9px 15px;white-space:nowrap;
+}
+.buy:hover{background:#FFD37A}
+.via{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+
+.empty-state{
+  border:1px dashed var(--edge);border-radius:14px;padding:34px 20px;text-align:center;
+}
+.empty-state p{margin:0 0 6px;font-size:16px}
+.empty-state small{color:var(--muted)}
+
+footer{
+  margin-top:56px;border-top:1px solid var(--edge);
+  padding:22px 0 40px;color:var(--muted);font-size:12.5px;
+}
+footer b{color:var(--paper)}
+
+@media (max-width:640px){
+  .card{grid-template-columns:72px 1fr;gap:12px}
+  .poster{width:72px;height:72px;font-size:28px}
+  .cbuy{grid-column:1/-1;text-align:left;display:flex;align-items:center;gap:12px}
+  .price-note{margin:0}
+  .cell{min-height:46px}
+  .cell .price{font-size:11px}
+  .chiplabel{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+<div class="main-col">
+
+<header class="marquee">
+  <div class="wrap">
+    <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+    <div class="brandrow">
+      <div class="brand">
+        <h1>Rang<span>manch</span></h1>
+        <p>Every community play, musical and desi standup night in the Bay Area — on one calendar.</p>
+      </div>
+      <div class="supply">
+        <strong>Running a show?</strong>
+        <p>List it free. We send you traffic and you keep your own ticketing.</p>
+        <button type="button">Add your show</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="filters" aria-label="Filters">
+    <div class="searchrow">
+      <label class="search">
+        <span aria-hidden="true" style="color:var(--muted)">⌕</span>
+        <input id="q" type="search" placeholder="Search a show, company or venue">
+      </label>
+    </div>
+    <div class="chipgroup" id="f-lang" role="group" aria-label="Language">
+      <span class="chiplabel">Language</span>
+    </div>
+    <div class="chipgroup" id="f-type" role="group" aria-label="Type">
+      <span class="chiplabel">Type</span>
+    </div>
+    <div class="chipgroup" id="f-region" role="group" aria-label="Area">
+      <span class="chiplabel">Area</span>
+    </div>
+  </section>
+
+  <p class="section-eyebrow">Pick a night</p>
+  <h2 class="section-title">When can you go?</h2>
+  <p class="section-sub">Lit dates have shows. The brighter the bulb, the cheaper the cheapest seat.</p>
+
+  <div class="calshell">
+    <div class="calhead">
+      <button class="navbtn" id="prev" type="button" aria-label="Previous month">‹</button>
+      <div class="calmonth" id="monthlabel"></div>
+      <button class="navbtn" id="next" type="button" aria-label="Next month">›</button>
+    </div>
+    <div class="dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+    <div class="grid" id="grid"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:rgba(255,211,122,.75)"></i>Under $20</span>
+      <span><i class="sw" style="background:rgba(255,176,31,.6)"></i>$20–34</span>
+      <span><i class="sw" style="background:rgba(194,118,26,.6)"></i>$35–49</span>
+      <span><i class="sw" style="background:rgba(110,74,46,.7)"></i>$50+</span>
+      <span><i class="sw" style="background:rgba(163,146,184,.3)"></i>Price not listed</span>
+      <span><i class="sw" style="background:rgba(255,255,255,.08)"></i>Nothing on</span>
+    </div>
+    <div class="cheapest" id="cheapest"></div>
+  </div>
+
+  <div class="resulthead">
+    <h3 id="resulttitle">All upcoming shows</h3>
+    <button class="clear" id="clear" type="button" hidden>Show all dates</button>
+  </div>
+  <div class="cards" id="cards"></div>
+
+  <footer>
+    <b>Real listings, no mock data.</b> Every show below comes from
+    <code>data/shows.csv</code> — a hand-collected dataset with a source URL on
+    every row (Sulekha, Naatak, Eventbrite, India Currents and company sites).
+    Only shows on or after today are listed. Tickets always click out to the
+    company's own seller — we never hold the money. See the analytics panel
+    for the full dataset, including past shows and collection methodology.
+  </footer>
+</div>
+</div>
+
+<aside class="analytics-col">
+  <div class="analytics-head">
+    <div class="analytics-eyebrow">Live analytics</div>
+    <h3>📊 The data behind it</h3>
+    <p>Same dataset the calendar reads from — filter by language, genre, region and date to see pricing, venue concentration, weekend collisions and company activity.</p>
+  </div>
+  <iframe src="http://localhost:8501/?embed=true" title="Bay Area Stage Analytics" loading="lazy"></iframe>
+</aside>
+
+</div>
+
+<script>
+/* ---------------- real data (from data/shows.csv, upcoming only) ---------------- */
+const TODAY = "2026-08-14";
+
+const SHOWS = [
+  {
+    "t": "12th Annual Desi Comedy Festival - Oakland", "co": "Desi Comedy Fest", "type": "Standup",
+    "lang": "Unknown", "venue": "The Sound Room", "city": "Oakland", "region": "East Bay",
+    "time": "7:30 PM", "lo": null, "hi": null, "seller": "Eventbrite",
+    "url": "https://www.eventbrite.com/e/12th-annual-desi-comedy-festival-tickets-1989267784493",
+    "hue": "#FF4D8D", "dates": ["2026-08-19"]
+  },
+  {
+    "t": "Pickleball", "co": "Hillbarn Theatre", "type": "Play",
+    "lang": "English", "venue": "Hillbarn Theatre", "city": "Foster City", "region": "Peninsula",
+    "time": null, "lo": 44, "hi": 65, "seller": "Own site",
+    "url": "https://www.hillbarntheatre.org/shows-tickets/",
+    "hue": "#FFC145", "dates": ["2026-08-20"]
+  },
+  {
+    "t": "12th Annual Desi Comedy Fest - Hayward", "co": "Desi Comedy Fest", "type": "Standup",
+    "lang": "Unknown", "venue": "Douglas Morrisson Theatre", "city": "Hayward", "region": "East Bay",
+    "time": "7:00 PM", "lo": null, "hi": null, "seller": "Eventbrite",
+    "url": "https://www.eventbrite.com/e/12th-annual-desi-comedy-fest-sat-aug-22-2026-hayward-tickets-1990835149524",
+    "hue": "#FF4D8D", "dates": ["2026-08-22"]
+  },
+  {
+    "t": "The Revolutionists", "co": "Los Altos Stage Company", "type": "Play",
+    "lang": "English", "venue": "Bus Barn Theater", "city": "Los Altos", "region": "Peninsula",
+    "time": "8:00 PM", "lo": 13, "hi": 41, "seller": "tix.com",
+    "url": "https://www.losaltosonline.com/stepping_out/la-stage-company-s-new-season-features-stories-of-hope-resilience-and-community/article_4fca3ca7-85bd-4e7f-baa6-8c44821f2599.html",
+    "hue": "#FFC145", "dates": ["2026-09-03"]
+  },
+  {
+    "t": "Krishna Leela - A Dance Musical", "co": "Indian Arts And Cultural Association", "type": "Dance",
+    "lang": "Multilingual", "venue": "HUSD Performing Arts Center", "city": "Hayward", "region": "East Bay",
+    "time": "4:00 PM", "lo": 25, "hi": 25, "seller": "Sulekha",
+    "url": "https://events.sulekha.com/krishna-leela-a-dance-musical-in-california_event-in_hayward-ca_401169",
+    "hue": "#C77DFF", "dates": ["2026-09-05"]
+  },
+  {
+    "t": "The Glass Menagerie", "co": "Center REPertory Company", "type": "Play",
+    "lang": "English", "venue": "Lesher Center for the Arts", "city": "Walnut Creek", "region": "East Bay",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.broadwayworld.com/san-francisco/article/THE-GLASS-MENAGERIE-to-Launch-Center-REPs-202627-Season-20260727",
+    "hue": "#FFC145", "dates": ["2026-09-06"]
+  },
+  {
+    "t": "A Gentleman's Guide to Love and Murder", "co": "Palo Alto Players", "type": "Musical",
+    "lang": "English", "venue": "Lucie Stern Theater", "city": "Palo Alto", "region": "Peninsula",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://paplayers.org/event/gentlemans-guide/",
+    "hue": "#FF8A3D", "dates": ["2026-09-11"]
+  },
+  {
+    "t": "Bombay Talkies 2", "co": "Naatak", "type": "Musical",
+    "lang": "Hindi", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/bombay-talkies-2/",
+    "hue": "#FF8A3D", "dates": ["2026-09-12"]
+  },
+  {
+    "t": "Jaane Pehchaane Anjane - A Musical Play by Anupam Kher & Swaroop Sampat", "co": "Instant Karma", "type": "Musical",
+    "lang": "Hindi", "venue": "San Jose Center for Performing Arts", "city": "San Jose", "region": "South Bay",
+    "time": "8:00 PM", "lo": 49, "hi": 500, "seller": "Sulekha",
+    "url": "https://events.sulekha.com/jaane-pehchaane-anjane-a-musical-play-by-anupam-kher-swaroop-sampat-live-in-bay-area_event-in_san-jose-ca_400597",
+    "hue": "#FF8A3D", "dates": ["2026-09-18"]
+  },
+  {
+    "t": "Halwa By Amit Tandon Stand Up Comedy", "co": "Oho Productions", "type": "Standup",
+    "lang": "Hindi", "venue": "San Jose Center for Performing Arts", "city": "San Jose", "region": "South Bay",
+    "time": "7:00 PM", "lo": 40, "hi": 120, "seller": "Sulekha",
+    "url": "https://events.sulekha.com/halwa-by-amit-tandon-stand-up-comedy-live-in-bay-area_event-in_san-jose-ca_399243",
+    "hue": "#FF4D8D", "dates": ["2026-09-19"]
+  },
+  {
+    "t": "Eureka Day", "co": "City Lights Theater Company", "type": "Play",
+    "lang": "English", "venue": "City Lights Theater", "city": "San Jose", "region": "South Bay",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://cltc.org/current-events/",
+    "hue": "#FFC145", "dates": ["2026-09-24"]
+  },
+  {
+    "t": "Last Over", "co": null, "type": "Play",
+    "lang": "Hindi", "venue": "India Community Center (ICC)", "city": "Milpitas", "region": "South Bay",
+    "time": "7:30 PM", "lo": 49, "hi": 199, "seller": "Sulekha",
+    "url": "https://events.sulekha.com/last-over-comedy-play-live-in-milpitas-ca_event-in_milpitas-ca_400932",
+    "hue": "#FFC145", "dates": ["2026-09-30"]
+  },
+  {
+    "t": "Dracula", "co": "TheatreWorks Silicon Valley", "type": "Play",
+    "lang": "English", "venue": "Mountain View Center for the Performing Arts", "city": "Mountain View", "region": "South Bay",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://theatreworks.org/mainstage/",
+    "hue": "#FFC145", "dates": ["2026-10-07"]
+  },
+  {
+    "t": "Gutenberg! The Musical!", "co": "Hillbarn Theatre", "type": "Musical",
+    "lang": "English", "venue": "Hillbarn Theatre", "city": "Foster City", "region": "Peninsula",
+    "time": null, "lo": 44, "hi": 65, "seller": "Own site",
+    "url": "https://www.hillbarntheatre.org/shows-tickets/",
+    "hue": "#FF8A3D", "dates": ["2026-10-08"]
+  },
+  {
+    "t": "Nothing Like Lear", "co": "Javanika Entertainments", "type": "Play",
+    "lang": "English", "venue": "Chabot College Auditorium", "city": "Hayward", "region": "East Bay",
+    "time": "8:00 PM", "lo": 29, "hi": 99, "seller": "Sulekha",
+    "url": "https://events.sulekha.com/nothing-like-fear-based-on-shakespear-s-king-lear_event-in_hayward-ca_400270",
+    "hue": "#FFC145", "dates": ["2026-10-09"]
+  },
+  {
+    "t": "Laugh Ticket 10 - Hindi/Hinglish Desi Stand-Up", "co": "Masala Comedy Club", "type": "Standup",
+    "lang": "Hinglish", "venue": "Sunnyvale Theatre", "city": "Sunnyvale", "region": "South Bay",
+    "time": "4:00 PM", "lo": null, "hi": null, "seller": "Not listed",
+    "url": "https://indiacurrents.com/event/laugh-ticket-10-hindi-hinglish-desi-stand-up-comedy/2026-10-18/",
+    "hue": "#FF4D8D", "dates": ["2026-10-18"]
+  },
+  {
+    "t": "The Addams Family", "co": "Palo Alto Players", "type": "Musical",
+    "lang": "English", "venue": "Lucie Stern Theater", "city": "Palo Alto", "region": "Peninsula",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://paplayers.org/season/",
+    "hue": "#FF8A3D", "dates": ["2026-10-30"]
+  },
+  {
+    "t": "Act Four", "co": "Naatak", "type": "Play",
+    "lang": "English", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/act-four/",
+    "hue": "#FFC145", "dates": ["2026-11-13"]
+  },
+  {
+    "t": "Dance Like A Man", "co": "Naatak", "type": "Play",
+    "lang": "English", "venue": "Starbright Theater", "city": "Campbell", "region": "South Bay",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/dance-like-a-man/",
+    "hue": "#FFC145", "dates": ["2027-01-30"]
+  },
+  {
+    "t": "Collateral Damage", "co": "Naatak", "type": "Play",
+    "lang": "Multilingual", "venue": "Starbright Theater", "city": "Campbell", "region": "South Bay",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/collateral-damage/",
+    "hue": "#FFC145", "dates": ["2027-04-03"]
+  },
+  {
+    "t": "Out of Order", "co": "Naatak", "type": "Play",
+    "lang": "Hindi", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
+    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/out-of-order/",
+    "hue": "#FFC145", "dates": ["2027-06-11"]
+  }
+];
+
+const LANGS = ["All", "English", "Hindi", "Hinglish", "Multilingual", "Unknown"];
+const TYPES = ["All", "Dance", "Musical", "Play", "Standup"];
+const REGIONS = ["All", "East Bay", "Peninsula", "South Bay"];
+
+let state = {lang:"All", type:"All", region:"All", q:"", date:null, month:7, year:2026};
+
+/* ---------------- helpers ---------------- */
+const iso = (y,m,d) => `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+const pretty = s => new Date(s+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+const money = n => n === null ? "Price TBA" : n === 0 ? "Free" : "$"+n;
+
+function tier(hasPrice, p){ if(!hasPrice) return 0; if(p===0||p<20) return 1; if(p<35) return 2; if(p<50) return 3; return 4; }
+
+function matches(s){
+  if(state.lang!=="All" && s.lang!==state.lang) return false;
+  if(state.type!=="All" && s.type!==state.type) return false;
+  if(state.region!=="All" && s.region!==state.region) return false;
+  if(state.q){
+    const hay = (s.t+" "+(s.co||"")+" "+s.venue).toLowerCase();
+    if(!hay.includes(state.q.toLowerCase())) return false;
+  }
+  return true;
+}
+
+/* performances = flattened show+date, filtered, future only */
+function performances(){
+  const out = [];
+  SHOWS.filter(matches).forEach(s => s.dates.forEach(d => {
+    if(d >= TODAY) out.push({...s, date:d});
+  }));
+  return out.sort((a,b)=> a.date.localeCompare(b.date) || (a.lo??9999)-(b.lo??9999));
+}
+
+/* ---------------- filter chips ---------------- */
+function buildChips(id, values, key){
+  const box = document.getElementById(id);
+  values.forEach(v => {
+    const b = document.createElement("button");
+    b.type="button"; b.className="chip"; b.textContent=v;
+    b.setAttribute("aria-pressed", state[key]===v);
+    b.onclick = () => {
+      state[key] = v; state.date = null;
+      box.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c.textContent===v));
+      render();
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------------- calendar ---------------- */
+function renderCalendar(perfs){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  const first = new Date(state.year, state.month, 1);
+  const days = new Date(state.year, state.month+1, 0).getDate();
+
+  document.getElementById("monthlabel").textContent =
+    first.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+
+  const byDate = {};
+  perfs.forEach(p => {
+    if(!byDate[p.date]) byDate[p.date] = {min:null, n:0, hasPrice:false};
+    byDate[p.date].n++;
+    if(p.lo !== null){
+      byDate[p.date].hasPrice = true;
+      byDate[p.date].min = byDate[p.date].min===null ? p.lo : Math.min(byDate[p.date].min, p.lo);
+    }
+  });
+
+  for(let i=0;i<first.getDay();i++){
+    const e = document.createElement("div"); e.className="cell empty"; grid.appendChild(e);
+  }
+
+  for(let d=1; d<=days; d++){
+    const key = iso(state.year, state.month, d);
+    const info = byDate[key];
+    const cell = document.createElement("button");
+    cell.type = "button";
+    cell.className = "cell";
+    if(key < TODAY) cell.classList.add("past");
+
+    const num = document.createElement("span");
+    num.className="dnum"; num.textContent=d; cell.appendChild(num);
+
+    if(info){
+      cell.classList.add("has","t"+tier(info.hasPrice, info.min));
+      const p = document.createElement("span");
+      p.className="price"; p.textContent = info.hasPrice ? money(info.min) : "TBA"; cell.appendChild(p);
+      cell.setAttribute("aria-label", `${pretty(key)} — ${info.n} show${info.n>1?"s":""}, from ${info.hasPrice ? money(info.min) : "an unlisted price"}`);
+      cell.onclick = () => { state.date = state.date===key ? null : key; render(); };
+    } else {
+      const dot = document.createElement("span");
+      dot.className="dot"; cell.appendChild(dot);
+      cell.disabled = true;
+    }
+    if(state.date===key) cell.classList.add("sel");
+    grid.appendChild(cell);
+  }
+
+  /* cheapest-night callout for this month (only among dates with a known price) */
+  const inMonth = Object.entries(byDate).filter(([k,v]) =>
+    +k.slice(0,4)===state.year && +k.slice(5,7)-1===state.month && v.hasPrice);
+  const note = document.getElementById("cheapest");
+  if(inMonth.length){
+    inMonth.sort((a,b)=> a[1].min-b[1].min);
+    const [k,v] = inMonth[0];
+    note.innerHTML = `Cheapest night this month: <b>${pretty(k)}</b> — ${v.n} show${v.n>1?"s":""} from <b>${money(v.min)}</b>.`;
+    note.hidden = false;
+  } else { note.hidden = true; }
+
+  const minMonth = new Date(TODAY+"T12:00:00");
+  document.getElementById("prev").disabled =
+    state.year < minMonth.getFullYear() ||
+    (state.year === minMonth.getFullYear() && state.month <= minMonth.getMonth());
+}
+
+/* ---------------- listings ---------------- */
+function renderCards(perfs){
+  const list = state.date ? perfs.filter(p => p.date===state.date) : perfs;
+  const box = document.getElementById("cards");
+  box.innerHTML = "";
+
+  document.getElementById("resulttitle").textContent = state.date
+    ? `${list.length} show${list.length===1?"":"s"} on ${pretty(state.date)}`
+    : `${list.length} upcoming show${list.length===1?"":"s"}`;
+  document.getElementById("clear").hidden = !state.date;
+
+  if(!list.length){
+    box.innerHTML = `<div class="empty-state">
+      <p>Nothing matches those filters yet.</p>
+      <small>Try widening the language or area — or clear the date.</small></div>`;
+    return;
+  }
+
+  list.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "card";
+    const priceText = p.lo === null ? "Price TBA" : p.lo === 0 ? "Free" : p.lo === p.hi ? "$"+p.lo : "$"+p.lo+"–"+p.hi;
+    const priceNote = p.lo === null ? "check seller for pricing" : p.lo === 0 ? "donation at door" : "per seat";
+    card.innerHTML = `
+      <div class="poster" style="background:linear-gradient(145deg, ${p.hue}, ${p.hue}88 70%, #1D0F2C)">${p.t[0]}</div>
+      <div class="cbody">
+        <h4>${p.t}</h4>
+        <p class="cmeta"><b>${p.co || "Producer not listed"}</b> · ${p.venue} · ${p.city}<br>${pretty(p.date)} · ${p.time || "Time TBA"}</p>
+        <div class="tags">
+          <span class="tag lang">${p.lang}</span>
+          <span class="tag ${p.type==="Standup"?"standup":""}">${p.type}</span>
+        </div>
+      </div>
+      <div class="cbuy">
+        <span class="price-lg">${priceText}</span>
+        <span class="price-note">${priceNote}</span>
+        <a class="buy" href="${p.url}" target="_blank" rel="noopener noreferrer">Get tickets ↗</a>
+        <span class="via">via ${p.seller}</span>
+      </div>`;
+    box.appendChild(card);
+  });
+}
+
+function render(){
+  const perfs = performances();
+  renderCalendar(perfs);
+  renderCards(perfs);
+}
+
+/* ---------------- init ---------------- */
+const bulbs = document.getElementById("bulbs");
+for(let i=0;i<28;i++){
+  const b = document.createElement("i");
+  b.className="bulb"; b.style.animationDelay = (i*0.11)+"s";
+  bulbs.appendChild(b);
+}
+buildChips("f-lang", LANGS, "lang");
+buildChips("f-type", TYPES, "type");
+buildChips("f-region", REGIONS, "region");
+
+document.getElementById("prev").onclick = () => {
+  state.month--; if(state.month<0){state.month=11;state.year--;} state.date=null; render();
+};
+document.getElementById("next").onclick = () => {
+  state.month++; if(state.month>11){state.month=0;state.year++;} state.date=null; render();
+};
+document.getElementById("clear").onclick = () => { state.date=null; render(); };
+document.getElementById("q").oninput = e => { state.q = e.target.value; state.date=null; render(); };
+
+render();
+</script>
+</body>
+</html>
