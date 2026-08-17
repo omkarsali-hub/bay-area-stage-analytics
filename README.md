@@ -4,6 +4,10 @@ A consumer-facing calendar for the Bay Area community theater and desi standup
 scene — every upcoming play, musical and comedy night in one place, built from
 a hand-collected dataset.
 
+**Live:**
+[Rangmanch calendar](https://omkarsali-hub.github.io/bay-area-stage-analytics/) ·
+[Analytics dashboard](https://omkarsali-hub-bay-area-stage-analytics-app-i2f8wp.streamlit.app/)
+
 **The Gen Academy — Mastering Agentic AI Bootcamp, Week 1 (Path B)**
 
 ## Problem
@@ -21,12 +25,16 @@ ticketing pages, then turned into two things built on the same data:
 
 ## What's here
 
-**[`index.html`](index.html) — Rangmanch, the primary deliverable.** A public
-calendar: pick a night, see what's on, click through to buy. Only shows on or
-after today are listed — this is a "what can I go see" tool, not an archive.
+**[`index.html`](index.html) — Rangmanch, the primary deliverable.**
+Live at **[omkarsali-hub.github.io/bay-area-stage-analytics](https://omkarsali-hub.github.io/bay-area-stage-analytics/)**.
+A public calendar: pick a night, see what's on, click through to buy. Only
+shows on or after today are listed — this is a "what can I go see" tool, not
+an archive.
 
 **[`app.py`](app.py) — a separate analytics dashboard**, run standalone (not
-embedded in Rangmanch). Same dataset, filterable, with:
+embedded in Rangmanch). Live at
+**[bay-area-stage-analytics.streamlit.app](https://omkarsali-hub-bay-area-stage-analytics-app-i2f8wp.streamlit.app/)**.
+Same dataset, filterable, with:
 
 | View | Question it answers |
 |---|---|
@@ -54,6 +62,8 @@ to where it came from. Every "Get tickets" link on Rangmanch goes straight to
 that same source — Rangmanch never takes payment or holds tickets itself.
 
 ## Run locally
+
+Both apps are live (links above) — this is only needed to run your own copy.
 
 ```bash
 pip install -r requirements.txt
