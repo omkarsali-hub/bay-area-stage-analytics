@@ -343,155 +343,413 @@ footer b{color:var(--paper)}
 
 <script>
 /* ---------------- real data (from data/shows.csv, upcoming only) ---------------- */
-const TODAY = "2026-08-14";
+const TODAY = "2026-08-22";
 
 const SHOWS = [
   {
-    "t": "12th Annual Desi Comedy Festival - Oakland", "co": "Desi Comedy Fest", "type": "Standup",
-    "lang": "Unknown", "venue": "The Sound Room", "city": "Oakland", "region": "East Bay",
-    "time": "7:30 PM", "lo": null, "hi": null, "seller": "Eventbrite",
-    "url": "https://www.eventbrite.com/e/12th-annual-desi-comedy-festival-tickets-1989267784493",
-    "hue": "#FF4D8D", "dates": ["2026-08-19"]
-  },
-  {
-    "t": "Pickleball", "co": "Hillbarn Theatre", "type": "Play",
-    "lang": "English", "venue": "Hillbarn Theatre", "city": "Foster City", "region": "Peninsula",
-    "time": null, "lo": 44, "hi": 65, "seller": "Own site",
-    "url": "https://www.hillbarntheatre.org/shows-tickets/",
-    "hue": "#FFC145", "dates": ["2026-08-20","2026-08-21","2026-08-22","2026-08-23","2026-08-27","2026-08-28","2026-08-29","2026-08-30","2026-09-03","2026-09-04","2026-09-05","2026-09-06","2026-09-10","2026-09-11","2026-09-12","2026-09-13"]
-  },
-  {
-    "t": "12th Annual Desi Comedy Fest - Hayward", "co": "Desi Comedy Fest", "type": "Standup",
-    "lang": "Unknown", "venue": "Douglas Morrisson Theatre", "city": "Hayward", "region": "East Bay",
-    "time": "7:00 PM", "lo": null, "hi": null, "seller": "Eventbrite",
+    "t": "12th Annual Desi Comedy Fest - Hayward",
+    "co": "Desi Comedy Fest",
+    "type": "Standup",
+    "lang": "Unknown",
+    "venue": "Douglas Morrisson Theatre",
+    "city": "Hayward",
+    "region": "East Bay",
+    "time": "7:00 PM",
+    "lo": null,
+    "hi": null,
+    "seller": "Eventbrite",
     "url": "https://www.eventbrite.com/e/12th-annual-desi-comedy-fest-sat-aug-22-2026-hayward-tickets-1990835149524",
-    "hue": "#FF4D8D", "dates": ["2026-08-22"]
+    "hue": "#FF4D8D",
+    "dates": [
+      "2026-08-22"
+    ]
   },
   {
-    "t": "The Revolutionists", "co": "Los Altos Stage Company", "type": "Play",
-    "lang": "English", "venue": "Bus Barn Theater", "city": "Los Altos", "region": "Peninsula",
-    "time": "8:00 PM", "lo": 13, "hi": 41, "seller": "tix.com",
-    "url": "https://www.losaltosonline.com/stepping_out/la-stage-company-s-new-season-features-stories-of-hope-resilience-and-community/article_4fca3ca7-85bd-4e7f-baa6-8c44821f2599.html",
-    "hue": "#FFC145", "dates": ["2026-09-03"]
-  },
-  {
-    "t": "Krishna Leela - A Dance Musical", "co": "Indian Arts And Cultural Association", "type": "Dance",
-    "lang": "Multilingual", "venue": "HUSD Performing Arts Center", "city": "Hayward", "region": "East Bay",
-    "time": "4:00 PM", "lo": 25, "hi": 25, "seller": "Sulekha",
-    "url": "https://events.sulekha.com/krishna-leela-a-dance-musical-in-california_event-in_hayward-ca_401169",
-    "hue": "#C77DFF", "dates": ["2026-09-05"]
-  },
-  {
-    "t": "The Glass Menagerie", "co": "Center REPertory Company", "type": "Play",
-    "lang": "English", "venue": "Lesher Center for the Arts", "city": "Walnut Creek", "region": "East Bay",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
-    "url": "https://www.broadwayworld.com/san-francisco/article/THE-GLASS-MENAGERIE-to-Launch-Center-REPs-202627-Season-20260727",
-    "hue": "#FFC145", "dates": ["2026-09-06"]
-  },
-  {
-    "t": "A Gentleman's Guide to Love and Murder", "co": "Palo Alto Players", "type": "Musical",
-    "lang": "English", "venue": "Lucie Stern Theater", "city": "Palo Alto", "region": "Peninsula",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
-    "url": "https://paplayers.org/event/gentlemans-guide/",
-    "hue": "#FF8A3D", "dates": ["2026-09-11"]
-  },
-  {
-    "t": "Bombay Talkies 2", "co": "Naatak", "type": "Musical",
-    "lang": "Hindi", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
-    "url": "https://www.naatak.org/portfolio/bombay-talkies-2/",
-    "hue": "#FF8A3D", "dates": ["2026-09-12","2026-09-13","2026-09-18","2026-09-19","2026-09-20","2026-09-25","2026-09-26","2026-09-27","2026-10-02","2026-10-03","2026-10-04"]
-  },
-  {
-    "t": "Jaane Pehchaane Anjane - A Musical Play by Anupam Kher & Swaroop Sampat", "co": "Instant Karma", "type": "Musical",
-    "lang": "Hindi", "venue": "San Jose Center for Performing Arts", "city": "San Jose", "region": "South Bay",
-    "time": "8:00 PM", "lo": 49, "hi": 500, "seller": "Sulekha",
-    "url": "https://events.sulekha.com/jaane-pehchaane-anjane-a-musical-play-by-anupam-kher-swaroop-sampat-live-in-bay-area_event-in_san-jose-ca_400597",
-    "hue": "#FF8A3D", "dates": ["2026-09-18"]
-  },
-  {
-    "t": "Halwa By Amit Tandon Stand Up Comedy", "co": "Oho Productions", "type": "Standup",
-    "lang": "Hindi", "venue": "San Jose Center for Performing Arts", "city": "San Jose", "region": "South Bay",
-    "time": "7:00 PM", "lo": 40, "hi": 120, "seller": "Sulekha",
-    "url": "https://events.sulekha.com/halwa-by-amit-tandon-stand-up-comedy-live-in-bay-area_event-in_san-jose-ca_399243",
-    "hue": "#FF4D8D", "dates": ["2026-09-19"]
-  },
-  {
-    "t": "Eureka Day", "co": "City Lights Theater Company", "type": "Play",
-    "lang": "English", "venue": "City Lights Theater", "city": "San Jose", "region": "South Bay",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
-    "url": "https://cltc.org/current-events/",
-    "hue": "#FFC145", "dates": ["2026-09-24"]
-  },
-  {
-    "t": "Last Over", "co": null, "type": "Play",
-    "lang": "Hindi", "venue": "India Community Center (ICC)", "city": "Milpitas", "region": "South Bay",
-    "time": "7:30 PM", "lo": 49, "hi": 199, "seller": "Sulekha",
-    "url": "https://events.sulekha.com/last-over-comedy-play-live-in-milpitas-ca_event-in_milpitas-ca_400932",
-    "hue": "#FFC145", "dates": ["2026-09-30"]
-  },
-  {
-    "t": "Dracula", "co": "TheatreWorks Silicon Valley", "type": "Play",
-    "lang": "English", "venue": "Mountain View Center for the Performing Arts", "city": "Mountain View", "region": "South Bay",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
-    "url": "https://theatreworks.org/mainstage/",
-    "hue": "#FFC145", "dates": ["2026-10-07"]
-  },
-  {
-    "t": "Gutenberg! The Musical!", "co": "Hillbarn Theatre", "type": "Musical",
-    "lang": "English", "venue": "Hillbarn Theatre", "city": "Foster City", "region": "Peninsula",
-    "time": null, "lo": 44, "hi": 65, "seller": "Own site",
+    "t": "Pickleball",
+    "co": "Hillbarn Theatre",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Hillbarn Theatre",
+    "city": "Foster City",
+    "region": "Peninsula",
+    "time": null,
+    "lo": 44,
+    "hi": 65,
+    "seller": "Own site",
     "url": "https://www.hillbarntheatre.org/shows-tickets/",
-    "hue": "#FF8A3D", "dates": ["2026-10-08"]
+    "hue": "#FFC145",
+    "dates": [
+      "2026-08-22",
+      "2026-08-23",
+      "2026-08-27",
+      "2026-08-28",
+      "2026-08-29",
+      "2026-08-30",
+      "2026-09-03",
+      "2026-09-04",
+      "2026-09-05",
+      "2026-09-06",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-12",
+      "2026-09-13"
+    ]
   },
   {
-    "t": "Nothing Like Lear", "co": "Javanika Entertainments", "type": "Play",
-    "lang": "English", "venue": "Chabot College Auditorium", "city": "Hayward", "region": "East Bay",
-    "time": "8:00 PM", "lo": 29, "hi": 99, "seller": "Sulekha",
+    "t": "The Revolutionists",
+    "co": "Los Altos Stage Company",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Bus Barn Theater",
+    "city": "Los Altos",
+    "region": "Peninsula",
+    "time": "8:00 PM",
+    "lo": 13,
+    "hi": 41,
+    "seller": "tix.com",
+    "url": "https://www.losaltosonline.com/stepping_out/la-stage-company-s-new-season-features-stories-of-hope-resilience-and-community/article_4fca3ca7-85bd-4e7f-baa6-8c44821f2599.html",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-09-03"
+    ]
+  },
+  {
+    "t": "A Farewell Dinner",
+    "co": "California Arts Association (CalAA)",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Historic Hoover Theatre",
+    "city": "San Jose",
+    "region": "South Bay",
+    "time": "8:00 PM",
+    "lo": 36,
+    "hi": 36,
+    "seller": "Own site",
+    "url": "https://www.calaa.org/upcoming-events/",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-09-04",
+      "2026-09-05",
+      "2026-09-05",
+      "2026-09-06",
+      "2026-09-06"
+    ]
+  },
+  {
+    "t": "Krishna Leela - A Dance Musical",
+    "co": "Indian Arts And Cultural Association",
+    "type": "Dance",
+    "lang": "Multilingual",
+    "venue": "HUSD Performing Arts Center",
+    "city": "Hayward",
+    "region": "East Bay",
+    "time": "4:00 PM",
+    "lo": 25,
+    "hi": 25,
+    "seller": "Sulekha",
+    "url": "https://events.sulekha.com/krishna-leela-a-dance-musical-in-california_event-in_hayward-ca_401169",
+    "hue": "#C77DFF",
+    "dates": [
+      "2026-09-05"
+    ]
+  },
+  {
+    "t": "The Glass Menagerie",
+    "co": "Center REPertory Company",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Lesher Center for the Arts",
+    "city": "Walnut Creek",
+    "region": "East Bay",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
+    "url": "https://www.broadwayworld.com/san-francisco/article/THE-GLASS-MENAGERIE-to-Launch-Center-REPs-202627-Season-20260727",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-09-06"
+    ]
+  },
+  {
+    "t": "A Gentleman's Guide to Love and Murder",
+    "co": "Palo Alto Players",
+    "type": "Musical",
+    "lang": "English",
+    "venue": "Lucie Stern Theater",
+    "city": "Palo Alto",
+    "region": "Peninsula",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
+    "url": "https://paplayers.org/event/gentlemans-guide/",
+    "hue": "#FF8A3D",
+    "dates": [
+      "2026-09-11"
+    ]
+  },
+  {
+    "t": "Bombay Talkies 2",
+    "co": "Naatak",
+    "type": "Musical",
+    "lang": "Hindi",
+    "venue": "Cubberley Theater",
+    "city": "Palo Alto",
+    "region": "Peninsula",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
+    "url": "https://www.naatak.org/portfolio/bombay-talkies-2/",
+    "hue": "#FF8A3D",
+    "dates": [
+      "2026-09-12",
+      "2026-09-13",
+      "2026-09-18",
+      "2026-09-19",
+      "2026-09-20",
+      "2026-09-25",
+      "2026-09-26",
+      "2026-09-27",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04"
+    ]
+  },
+  {
+    "t": "Jaane Pehchaane Anjane - A Musical Play by Anupam Kher & Swaroop Sampat",
+    "co": "Instant Karma",
+    "type": "Musical",
+    "lang": "Hindi",
+    "venue": "San Jose Center for Performing Arts",
+    "city": "San Jose",
+    "region": "South Bay",
+    "time": "8:00 PM",
+    "lo": 49,
+    "hi": 500,
+    "seller": "Sulekha",
+    "url": "https://events.sulekha.com/jaane-pehchaane-anjane-a-musical-play-by-anupam-kher-swaroop-sampat-live-in-bay-area_event-in_san-jose-ca_400597",
+    "hue": "#FF8A3D",
+    "dates": [
+      "2026-09-18"
+    ]
+  },
+  {
+    "t": "Halwa By Amit Tandon Stand Up Comedy",
+    "co": "Oho Productions",
+    "type": "Standup",
+    "lang": "Hindi",
+    "venue": "San Jose Center for Performing Arts",
+    "city": "San Jose",
+    "region": "South Bay",
+    "time": "7:00 PM",
+    "lo": 40,
+    "hi": 120,
+    "seller": "Sulekha",
+    "url": "https://events.sulekha.com/halwa-by-amit-tandon-stand-up-comedy-live-in-bay-area_event-in_san-jose-ca_399243",
+    "hue": "#FF4D8D",
+    "dates": [
+      "2026-09-19"
+    ]
+  },
+  {
+    "t": "Eureka Day",
+    "co": "City Lights Theater Company",
+    "type": "Play",
+    "lang": "English",
+    "venue": "City Lights Theater",
+    "city": "San Jose",
+    "region": "South Bay",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
+    "url": "https://cltc.org/current-events/",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-09-24"
+    ]
+  },
+  {
+    "t": "Last Over",
+    "co": null,
+    "type": "Play",
+    "lang": "Hindi",
+    "venue": "India Community Center (ICC)",
+    "city": "Milpitas",
+    "region": "South Bay",
+    "time": "7:30 PM",
+    "lo": 49,
+    "hi": 199,
+    "seller": "Sulekha",
+    "url": "https://events.sulekha.com/last-over-comedy-play-live-in-milpitas-ca_event-in_milpitas-ca_400932",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-09-30"
+    ]
+  },
+  {
+    "t": "Dracula",
+    "co": "TheatreWorks Silicon Valley",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Mountain View Center for the Performing Arts",
+    "city": "Mountain View",
+    "region": "South Bay",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
+    "url": "https://theatreworks.org/mainstage/",
+    "hue": "#FFC145",
+    "dates": [
+      "2026-10-07"
+    ]
+  },
+  {
+    "t": "Gutenberg! The Musical!",
+    "co": "Hillbarn Theatre",
+    "type": "Musical",
+    "lang": "English",
+    "venue": "Hillbarn Theatre",
+    "city": "Foster City",
+    "region": "Peninsula",
+    "time": null,
+    "lo": 44,
+    "hi": 65,
+    "seller": "Own site",
+    "url": "https://www.hillbarntheatre.org/shows-tickets/",
+    "hue": "#FF8A3D",
+    "dates": [
+      "2026-10-08"
+    ]
+  },
+  {
+    "t": "Nothing Like Lear",
+    "co": "Javanika Entertainments",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Chabot College Auditorium",
+    "city": "Hayward",
+    "region": "East Bay",
+    "time": "8:00 PM",
+    "lo": 29,
+    "hi": 99,
+    "seller": "Sulekha",
     "url": "https://events.sulekha.com/nothing-like-fear-based-on-shakespear-s-king-lear_event-in_hayward-ca_400270",
-    "hue": "#FFC145", "dates": ["2026-10-09"]
+    "hue": "#FFC145",
+    "dates": [
+      "2026-10-09"
+    ]
   },
   {
-    "t": "Laugh Ticket 10 - Hindi/Hinglish Desi Stand-Up", "co": "Masala Comedy Club", "type": "Standup",
-    "lang": "Hinglish", "venue": "Sunnyvale Theatre", "city": "Sunnyvale", "region": "South Bay",
-    "time": "4:00 PM", "lo": null, "hi": null, "seller": "Not listed",
+    "t": "Laugh Ticket 10 - Hindi/Hinglish Desi Stand-Up",
+    "co": "Masala Comedy Club",
+    "type": "Standup",
+    "lang": "Hinglish",
+    "venue": "Sunnyvale Theatre",
+    "city": "Sunnyvale",
+    "region": "South Bay",
+    "time": "4:00 PM",
+    "lo": null,
+    "hi": null,
+    "seller": "Not listed",
     "url": "https://indiacurrents.com/event/laugh-ticket-10-hindi-hinglish-desi-stand-up-comedy/2026-10-18/",
-    "hue": "#FF4D8D", "dates": ["2026-10-18"]
+    "hue": "#FF4D8D",
+    "dates": [
+      "2026-10-18"
+    ]
   },
   {
-    "t": "The Addams Family", "co": "Palo Alto Players", "type": "Musical",
-    "lang": "English", "venue": "Lucie Stern Theater", "city": "Palo Alto", "region": "Peninsula",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "t": "The Addams Family",
+    "co": "Palo Alto Players",
+    "type": "Musical",
+    "lang": "English",
+    "venue": "Lucie Stern Theater",
+    "city": "Palo Alto",
+    "region": "Peninsula",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
     "url": "https://paplayers.org/season/",
-    "hue": "#FF8A3D", "dates": ["2026-10-30"]
+    "hue": "#FF8A3D",
+    "dates": [
+      "2026-10-30"
+    ]
   },
   {
-    "t": "Act Four", "co": "Naatak", "type": "Play",
-    "lang": "English", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "t": "Act Four",
+    "co": "Naatak",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Cubberley Theater",
+    "city": "Palo Alto",
+    "region": "Peninsula",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
     "url": "https://www.naatak.org/portfolio/act-four/",
-    "hue": "#FFC145", "dates": ["2026-11-13"]
+    "hue": "#FFC145",
+    "dates": [
+      "2026-11-13"
+    ]
   },
   {
-    "t": "Dance Like A Man", "co": "Naatak", "type": "Play",
-    "lang": "English", "venue": "Starbright Theater", "city": "Campbell", "region": "South Bay",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "t": "Dance Like A Man",
+    "co": "Naatak",
+    "type": "Play",
+    "lang": "English",
+    "venue": "Starbright Theater",
+    "city": "Campbell",
+    "region": "South Bay",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
     "url": "https://www.naatak.org/portfolio/dance-like-a-man/",
-    "hue": "#FFC145", "dates": ["2027-01-30"]
+    "hue": "#FFC145",
+    "dates": [
+      "2027-01-30"
+    ]
   },
   {
-    "t": "Collateral Damage", "co": "Naatak", "type": "Play",
-    "lang": "Multilingual", "venue": "Starbright Theater", "city": "Campbell", "region": "South Bay",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "t": "Collateral Damage",
+    "co": "Naatak",
+    "type": "Play",
+    "lang": "Multilingual",
+    "venue": "Starbright Theater",
+    "city": "Campbell",
+    "region": "South Bay",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
     "url": "https://www.naatak.org/portfolio/collateral-damage/",
-    "hue": "#FFC145", "dates": ["2027-04-03"]
+    "hue": "#FFC145",
+    "dates": [
+      "2027-04-03"
+    ]
   },
   {
-    "t": "Out of Order", "co": "Naatak", "type": "Play",
-    "lang": "Hindi", "venue": "Cubberley Theater", "city": "Palo Alto", "region": "Peninsula",
-    "time": null, "lo": null, "hi": null, "seller": "Own site",
+    "t": "Out of Order",
+    "co": "Naatak",
+    "type": "Play",
+    "lang": "Hindi",
+    "venue": "Cubberley Theater",
+    "city": "Palo Alto",
+    "region": "Peninsula",
+    "time": null,
+    "lo": null,
+    "hi": null,
+    "seller": "Own site",
     "url": "https://www.naatak.org/portfolio/out-of-order/",
-    "hue": "#FFC145", "dates": ["2027-06-11"]
+    "hue": "#FFC145",
+    "dates": [
+      "2027-06-11"
+    ]
   }
 ];
 

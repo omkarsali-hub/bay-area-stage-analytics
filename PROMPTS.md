@@ -408,6 +408,60 @@ secondhand recollection was the right call, but transparently, not silently.
 
 ---
 
+## Prompt 9 — Add a missing show (post-submission, live site)
+
+**Context**
+
+After submission, both sites went live (GitHub Pages + Streamlit Community
+Cloud). This is the first data update against the deployed, public version.
+
+**Feedback received**
+
+```
+I see that Rangmanch still doesn't have all the plays. Calaa.org has some
+plays this weekend. but I don't see it on the calendar.
+```
+
+**What I did**
+
+Researched calaa.org (California Arts Association, a real Bay Area desi
+theater nonprofit founded 2002 — a legitimate source missed in the original
+collection pass). Their own site is WebFetch-hostile (JS-rendered, loading
+spinners with no static fallback), so I switched to the actual browser tool
+to get real rendered content. Found their currently-promoted show, "A
+Farewell Dinner" (English adaptation of a French comedy, full cast/director
+credited, Historic Hoover Theatre, San Jose) — 5 real performances, Sep 4-6,
+with an actual observed seat price ($36.21) from their interactive seat map.
+
+**What I had to push back on**
+
+The show the user described as "this weekend" didn't match what I found —
+CalAA's own homepage, upcoming-events page, and year-calendar graphic were
+all promoting the September show, not anything for the actual current
+weekend. Their year-calendar labels August's slot generically as "Full
+Length India Play," but I couldn't find a specific dated listing, venue, or
+ticket page for it — their Instagram required login, their Facebook group is
+private. Rather than invent an August show to match the report, I added the
+one I could fully verify (September) and flagged the gap: I could not
+confirm a specific Aug 22-23 CalAA show despite checking their site, search
+engines, and public social profiles, and would need a direct link or more
+detail to add it accurately.
+
+**What I had to fix**
+
+A self-inflicted bug while wiring the new data into `index.html`: a Python
+line-replacement script that swapped in the regenerated `SHOWS` array
+dropped the `const SHOWS = ` assignment prefix, leaving a bare array literal
+— valid JS syntax, so nothing errored at parse time, but `SHOWS` was
+undefined everywhere it was referenced. Caught by loading the page and
+checking the console rather than assuming the script worked because it ran
+without a Python exception. The console's own error log was also
+momentarily misleading — it kept showing the stale pre-fix error after the
+fix was live, until I checked `typeof SHOWS` directly in the page instead
+of trusting the log.
+
+---
+
 ## Learnings
 
 - **Where the assistant was strongest:** Generating correct, idiomatic
